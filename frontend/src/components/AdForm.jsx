@@ -49,7 +49,9 @@ const AdForm = ({ onSubmit, initialData = {} }) => {
 				type='number'
 				label='Ціна'
 				value={formData.price}
-				onChange={e => setFormData({ ...formData, price: e.target.value })}
+				onChange={e =>
+					setFormData({ ...formData, price: Number(e.target.value) })
+				}
 				required
 			/>
 			<TextField

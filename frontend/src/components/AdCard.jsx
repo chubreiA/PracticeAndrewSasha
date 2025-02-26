@@ -13,6 +13,9 @@ const AdCard = ({ ad, onEdit, onDelete }) => {
 	const { user } = useUser()
 	const isOwner = user && user._id === ad.author
 
+	console.log(ad)
+	console.log("Ціна оголошення:", ad.price);
+
 	return (
 		<Card className='h-full shadow-lg hover:shadow-xl transition-shadow'>
 			<CardMedia

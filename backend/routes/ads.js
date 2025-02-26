@@ -8,11 +8,18 @@ const router = express.Router()
 router.get('/', async (req, res) => {
 	try {
 		const query = {}
+
+		// Фільтр за текстовим пошуком
 		if (req.query.search) {
 			query.$or = [
 				{ title: new RegExp(req.query.search, 'i') },
 				{ description: new RegExp(req.query.search, 'i') },
 			]
+		}
+
+		// Фільтр за категорією
+		if (req.query.category && req.query.category !== '') {
+			query.category = req.query.category
 		}
 
 		const ads = await Ad.find(query).populate('author', 'name email')
@@ -39,10 +46,21 @@ router.get('/my', auth, async (req, res) => {
 // Create new ad
 router.post('/', auth, async (req, res) => {
 	try {
+		const { title, description, price, category } = req.body
+
+		// Перевіряємо, чи передана категорія
+		if (!category) {
+			return res.status(400).json({ message: 'Category is required' })
+		}
+
 		const ad = new Ad({
-			...req.body,
+			title,
+			description,
+			price,
+			category,
 			author: req.user._id,
 		})
+
 		await ad.save()
 		res.status(201).json(ad)
 	} catch (error) {
@@ -82,6 +100,7 @@ router.delete('/:id', auth, async (req, res) => {
 	}
 })
 
+// Get a single ad by ID
 router.get('/:id', async (req, res) => {
 	try {
 		const ad = await Ad.findById(req.params.id).populate('author', 'name email')

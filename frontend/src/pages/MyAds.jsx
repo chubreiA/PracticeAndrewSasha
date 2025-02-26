@@ -4,10 +4,12 @@ import toast from 'react-hot-toast'
 import AdCard from '../components/AdCard'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { deleteAd, getUserAds } from '../services/ads'
+import { useNavigate } from 'react-router-dom'
 
 const MyAds = () => {
 	const [ads, setAds] = useState([])
 	const [loading, setLoading] = useState(true)
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		loadAds()
@@ -34,6 +36,10 @@ const MyAds = () => {
 		}
 	}
 
+	const handleEdit = ad => {
+    navigate(`/edit-ad/${ad._id}`)
+}
+
 	if (loading) return <LoadingSpinner />
 
 	return (
@@ -48,7 +54,7 @@ const MyAds = () => {
 				<Grid container spacing={3}>
 					{ads.map(ad => (
 						<Grid item xs={12} sm={6} md={4} key={ad._id}>
-							<AdCard ad={ad} onDelete={handleDelete} />
+							<AdCard ad={ad} onDelete={handleDelete} onEdit={handleEdit} />
 						</Grid>
 					))}
 				</Grid>

@@ -25,36 +25,47 @@ const Home = () => {
 	const debounceFilters = useDebounce(filters, 500)
 
 	useEffect(() => {
-		console.log("Поточна категорія:", filters.category);
+		console.log('Поточна категорія:', filters.category)
 		loadAds()
 	}, [debounceFilters])
 
 	const loadAds = async () => {
 		try {
 			setLoading(true)
-			const response = await getAds(filters)
-			let sortedAds = [...response]
+			console.log('Фільтри перед запитом:', filters)
 
-			// Сортування на фронтенді
+			const response = await getAds(filters)
+			let filteredAds = [...response]
+
+			// Фільтрація за ціною
+			const min = Number(filters.minPrice) || 0
+			const max = Number(filters.maxPrice) || Infinity
+
+			filteredAds = filteredAds.filter(ad => {
+				const price = Number(ad.price)
+				return price >= min && price <= max
+			})
+
+			// Сортування
 			switch (filters.sortBy) {
 				case 'expensive':
-					sortedAds.sort((a, b) => b.price - a.price)
+					filteredAds.sort((a, b) => b.price - a.price)
 					break
 				case 'cheap':
-					sortedAds.sort((a, b) => a.price - b.price)
+					filteredAds.sort((a, b) => a.price - b.price)
 					break
 				case 'oldest':
-					sortedAds.sort(
+					filteredAds.sort(
 						(a, b) => new Date(a.createdAt) - new Date(b.createdAt)
 					)
 					break
 				default: // newest
-					sortedAds.sort(
+					filteredAds.sort(
 						(a, b) => new Date(b.createdAt) - new Date(a.createdAt)
 					)
 			}
 
-			setAds(sortedAds)
+			setAds(filteredAds)
 		} catch (error) {
 			console.error('Error loading ads:', error)
 			toast.error('Помилка завантаження оголошень')

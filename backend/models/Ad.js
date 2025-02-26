@@ -14,6 +14,15 @@ const adSchema = new mongoose.Schema({
 		type: Number,
 		required: true,
 	},
+	category: {
+		type: String,
+		required: true,
+		enum: ['Авто', 'Нерухомість', 'Електроніка', 'Робота', 'Послуги', 'Інше'],
+	},
+	image: {
+		type: String,
+		default: '',
+	},
 	author: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User',

@@ -21,7 +21,7 @@ const SearchBar = ({ filters, setFilters, onReset }) => {
 		console.log(`Changing ${field} to:`, value) // Debug log
 		setFilters(prev => ({
 			...prev,
-			[field]: value,
+			[field]: value === '' ? '' : Number(value),
 		}))
 	}
 
@@ -38,12 +38,12 @@ const SearchBar = ({ filters, setFilters, onReset }) => {
 
 	const categories = [
 		{ label: 'Всі категорії', value: '' },
-		{ label: 'Авто', value: 'auto' },
-		{ label: 'Нерухомість', value: 'real_estate' },
-		{ label: 'Електроніка', value: 'electronics' },
-		{ label: 'Робота', value: 'jobs' },
-		{ label: 'Послуги', value: 'services' },
-		{ label: 'Інше', value: 'other' },
+		{ label: 'Авто', value: 'Авто' },
+		{ label: 'Нерухомість', value: 'Нерухомість' },
+		{ label: 'Електроніка', value: 'Електроніка' },
+		{ label: 'Робота', value: 'Робота' },
+		{ label: 'Послуги', value: 'Послуги' },
+		{ label: 'Інше', value: 'Інше' },
 	]
 
 	return (
