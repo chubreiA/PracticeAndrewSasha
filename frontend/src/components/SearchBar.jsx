@@ -16,14 +16,23 @@ import { useState } from 'react'
 const SearchBar = ({ filters, setFilters, onReset }) => {
 	const [showAdvanced, setShowAdvanced] = useState(false)
 
-	const handleChange = field => event => {
-		const value = event.target.value
-		console.log(`Changing ${field} to:`, value) // Debug log
-		setFilters(prev => ({
-			...prev,
-			[field]: value === '' ? '' : Number(value),
-		}))
-	}
+const handleChange = field => event => {
+    const value = event.target.value
+    console.log(`Changing ${field} to:`, value)
+
+    if (field === 'minPrice' || field === 'maxPrice') {
+      setFilters(prev => ({
+        ...prev,
+        [field]: value === '' ? '' : Number(value),
+      }))
+    } else {
+      setFilters(prev => ({
+        ...prev,
+        [field]: value,
+      }))
+    }
+  }
+
 
 	const handleReset = () => {
 		setFilters({
